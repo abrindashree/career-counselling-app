@@ -8,14 +8,18 @@ function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [username, setUsername] = useState("");
-  const handleLogin = async () => {
-
+  const handleLogin = async (e) => {
+    e.preventDefault();
     console.log({
       email, password
     });    
     const response = await axios.post("http://localhost:3000/signin", {
-      username: username
+      username,
+      email,
+      password
     })      
+    console.log(response.data);
+    
     if (response.data){
       navigate('/', {state: {
         user: response.data.username
@@ -25,7 +29,7 @@ function Login() {
 
   return (
     <div className="login-container">
-      <form className="login-form" >
+      <form className="login-form" onSubmit={handleLogin} >
         <h2>Login</h2>
         <div className="form-group">
           <label>Username: </label>
@@ -57,7 +61,7 @@ function Login() {
             // required
           />
         </div>
-        <button className="login-button" onClick={handleLogin}>
+        <button className="login-button" >
           Login
         </button>
       </form>

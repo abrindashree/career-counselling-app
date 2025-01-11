@@ -1,22 +1,52 @@
 const express = require('express')
-const cors = require('cors')
 const app = express()
-
-app.use(cors())
+const cors = require('cors')
+const { Users } = require('./db') 
 app.use(express.json())
+app.use(cors())
 
-app.post('/signin', (req, res) => {
-    const body = req.body;
-    const { username} = body
-    
-    res.status(200)
-   res.json({
-    msg: "Signin Successful",
-    username
-   })
-    
+app.post('/create-user', async(req, res)=>{
+    const {username, email, password} =  req.body
+    const user = await Users.findOne({
+        email
+    })
+    if(user){
+       res.json({
+        msg: 'user already exist'
+       })
+    }
+    else{
+       const newUser = await Users.create({
+        username,
+        email,
+        password
+       })
+       res.json({
+        username,
+        msg: "user successfully created.."
+       })
+
+    }
 })
 
-app.listen(3000, () => {
-    console.log(`http://localhost:3000`)
+app.get("/signin", async(req, res)=>{
+    const {email, password} = req.body
+    const user = await Users.findOne({
+        email,
+        password
+    })
+    if(user){
+        res.json({
+            msg: 'signin successfully..'
+        })
+    }
+    else{
+        res.json({
+            msg: 'email/password incorrect'
+        })
+    }
+})
+
+app.listen(3000,()=>{
+    console.log("Started..");    
 })
