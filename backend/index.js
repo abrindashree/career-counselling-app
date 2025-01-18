@@ -8,6 +8,8 @@ app.use(cors())
 
 app.post('/create-user', async(req, res)=>{
     const {username, email, password} =  req.body
+    console.log(req.body);
+    
     const user = await Users.findOne({
         email
     })
@@ -32,24 +34,32 @@ app.post('/create-user', async(req, res)=>{
     }
 })
 
-app.get("/signin", async(req, res)=>{
-    const {email, password} = req.body
+app.post("/signin", async(req, res)=>{
+    const {email, password} = req.body    
     const user = await Users.findOne({
         email        
     })    
-    
-    const isPasswordCorrect = await bcrypt.compare(password, user.password)    
-    
-    if(isPasswordCorrect){
+    if(user){
+        const isPasswordCorrect = await bcrypt.compare(password, user.password)            
+        if(isPasswordCorrect){
+            res.status(200).json({
+                success: true,
+                msg: 'signin successfully..'
+            })
+        }
+        else{
+            res.json({
+                success: false,
+                msg: 'email/password incorrect'
+            })
+        }
+    }else{
         res.json({
-            msg: 'signin successfully..'
+            success: false,
+            msg: "user does not exist"
         })
     }
-    else{
-        res.json({
-            msg: 'email/password incorrect'
-        })
-    }
+    
 })
 
 app.listen(3000,()=>{

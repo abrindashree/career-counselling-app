@@ -11,21 +11,22 @@ function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [username, setUsername] = useState("");
+  const [error, setError] = useState("")
 
   const handleLogin = async (e) => {
-    e.preventDefault();
-    console.log({ email, password });
+    e.preventDefault();    
+
     
-    const response = await axios.get("http://localhost:3000/signin", {
+    const response = await axios.post("http://localhost:3000/signin", {
       username,
       email,
       password
-    });
+    });        
 
-    console.log(response.data);
-
-    if (response.data) {
+    if (response.data.success) {
       navigate('/home', { state: { user: response.data.username } });
+    }else{        
+      setError(response.data.msg)
     }
   };
 
@@ -85,6 +86,7 @@ function Login() {
             </div>
           </div>
           <button className="btn">Login</button>
+          {error && <p>{error}</p>}
         </form>
       </div>
     </div>
