@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 
+
 try{
     mongoose.connect("mongodb://0.0.0.0:27017/testDB")
     console.log("db connected successfully");

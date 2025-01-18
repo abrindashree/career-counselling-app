@@ -1,6 +1,7 @@
 const express = require('express')
 const app = express()
 const cors = require('cors')
+const bcrypt = require('bcrypt')
 const { Users } = require('./db') 
 app.use(express.json())
 app.use(cors())
@@ -14,12 +15,15 @@ app.post('/create-user', async(req, res)=>{
        res.json({
         msg: 'user already exist'
        })
+       console.log("user exist")
     }
     else{
-       const newUser = await Users.create({
+        const saltRounds = 10;
+        const hashedPassword = await bcrypt.hash(password, saltRounds);
+        const newUser = await Users.create({
         username,
         email,
-        password
+        password : hashedPassword
        })
        res.json({
         username,
