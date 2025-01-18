@@ -2,9 +2,9 @@ import React, { useState } from "react";
 import "./Login.css";
 import axios from 'axios';
 import { useNavigate } from "react-router-dom";
-import wave from "../assests/wave.png";
-import bg from './assets/bg.svg';
-import avatar from './assets/avatar.svg';
+import wave from "../assets/wave.png";
+import bg from '../assets/bg.svg';
+import avatar from '../assets/avatar.svg';
 
 function Login() {
   const navigate = useNavigate();
@@ -16,7 +16,7 @@ function Login() {
     e.preventDefault();
     console.log({ email, password });
     
-    const response = await axios.post("http://localhost:3000/signin", {
+    const response = await axios.get("http://localhost:3000/signin", {
       username,
       email,
       password

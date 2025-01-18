@@ -14,8 +14,7 @@ app.post('/create-user', async(req, res)=>{
     if(user){
        res.json({
         msg: 'user already exist'
-       })
-       console.log("user exist")
+       })       
     }
     else{
         const saltRounds = 10;
@@ -36,10 +35,12 @@ app.post('/create-user', async(req, res)=>{
 app.get("/signin", async(req, res)=>{
     const {email, password} = req.body
     const user = await Users.findOne({
-        email,
-        password
-    })
-    if(user){
+        email        
+    })    
+    
+    const isPasswordCorrect = await bcrypt.compare(password, user.password)    
+    
+    if(isPasswordCorrect){
         res.json({
             msg: 'signin successfully..'
         })
