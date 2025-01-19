@@ -3,8 +3,13 @@ const app = express()
 const cors = require('cors')
 const bcrypt = require('bcrypt')
 const { Users } = require('./db') 
+const jwt = require("jsonwebtoken")
+require("dotenv").config();
 app.use(express.json())
-app.use(cors())
+app.use(cors({
+    origin: 'http://localhost:5173',
+    credentials: true,
+}))
 
 app.post('/create-user', async(req, res)=>{
     const {username, email, password} =  req.body
@@ -40,10 +45,16 @@ app.post("/signin", async(req, res)=>{
         email        
     })    
     if(user){
-        const isPasswordCorrect = await bcrypt.compare(password, user.password)            
+        const isPasswordCorrect = await bcrypt.compare(password, user.password)    
         if(isPasswordCorrect){
+            const { username } = user            
+            const jwtToken = jwt.sign({
+                username
+            }, process.env.JWT_SECRET)                           
             res.status(200).json({
+                username,
                 success: true,
+                jwtToken,
                 msg: 'signin successfully..'
             })
         }

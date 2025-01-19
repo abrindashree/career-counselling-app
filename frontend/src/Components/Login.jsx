@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./Login.css";
 import axios from 'axios';
 import { useNavigate } from "react-router-dom";
@@ -13,6 +13,13 @@ function Login() {
   const [username, setUsername] = useState("");
   const [error, setError] = useState("")
 
+  useEffect(() => {
+      const isAuthenticated = localStorage.getItem("jwtToken");
+      if(isAuthenticated){
+        navigate("/")
+      } 
+    }, [])
+
   const handleLogin = async (e) => {
     e.preventDefault();    
 
@@ -24,7 +31,8 @@ function Login() {
     });        
 
     if (response.data.success) {
-      navigate('/home', { state: { user: response.data.username } });
+      localStorage.setItem("jwtToken", response.data.jwtToken);
+      navigate('/', { state: { user: response.data.username } });
     }else{        
       setError(response.data.msg)
     }
