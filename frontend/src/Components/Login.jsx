@@ -1,31 +1,40 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./Login.css";
 import axios from 'axios';
 import { useNavigate } from "react-router-dom";
-import wave from "../assests/wave.png";
-import bg from './assets/bg.svg';
-import avatar from './assets/avatar.svg';
+import wave from "../assets/wave.png";
+import bg from '../assets/bg.svg';
+import avatar from '../assets/avatar.svg';
 
 function Login() {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [username, setUsername] = useState("");
+  const [error, setError] = useState("")
+
+  useEffect(() => {
+      const isAuthenticated = localStorage.getItem("jwtToken");
+      if(isAuthenticated){
+        navigate("/")
+      } 
+    }, [])
 
   const handleLogin = async (e) => {
-    e.preventDefault();
-    console.log({ email, password });
+    e.preventDefault();    
+
     
     const response = await axios.post("http://localhost:3000/signin", {
       username,
       email,
       password
-    });
+    });        
 
-    console.log(response.data);
-
-    if (response.data) {
-      navigate('/home', { state: { user: response.data.username } });
+    if (response.data.success) {
+      localStorage.setItem("jwtToken", response.data.jwtToken);
+      navigate('/', { state: { user: response.data.username } });
+    }else{        
+      setError(response.data.msg)
     }
   };
 
@@ -85,6 +94,7 @@ function Login() {
             </div>
           </div>
           <button className="btn">Login</button>
+          {error && <p>{error}</p>}
         </form>
       </div>
     </div>
