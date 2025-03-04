@@ -1,0 +1,30 @@
+research_task:
+  description: >
+    Gather **comprehensive, up-to-date** information about {topic}, focusing on  
+    entrance exams, top colleges, cutoffs, trending courses, and career opportunities.  
+    Ensure the data is **accurate, sourced from reliable platforms**, and relevant  
+    for the current year ({current_year}).  
+    Look for key trends, recent developments, and any unique insights  
+    that would be valuable for students making career decisions.  
+  expected_output: >
+    A list of **10+ bullet points** covering the **most relevant, high-impact**  
+    information about {topic}, including key statistics, trends, and recent updates.  
+    If applicable, include links to trusted sources for verification.  
+  agent: searcher  
+
+reporting_task:
+  description: >
+    Analyze the research findings and **transform** them into a structured,  
+    engaging, and well-detailed report.  
+    Expand each key point into a **comprehensive** section, ensuring clarity,  
+    relevance, and easy readability.  
+    Personalize insights **based on the target audience** (e.g., students,  
+    professionals, parents). Use a structured approach with headers,  
+    subheaders, and bullet points where necessary.  
+    Ensure the report is **actionable**, offering recommendations, next steps,  
+    and any **valuable insights** beyond just presenting data.  
+  expected_output: >
+    A **well-organized, detailed** report formatted in Markdown (excluding '```').  
+    The report should have clear **sections**, relevant statistics, and a  
+    **concise summary** at the end, highlighting key takeaways.  
+  agent: summarizer  
